@@ -12,3 +12,15 @@ html {
   width: 100%;
   margin: 20px 40px;
 }
+.button-cart{
+  background-color: blue;
+}
+.show-cart{
+  background-color: red;
+  margin-top: 20px;
+}
+ul {
+  list-style: none;
+  display: flex;
+  gap: 10px;
+}
