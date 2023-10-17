@@ -3,6 +3,7 @@ import Categories from "./components/categories";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { CATEGORIES } from "./data/categories";
 import List from "./components/list";
+import ShowCart from "./components/ShowCart";
 
 function App() {
   return (
@@ -17,6 +18,7 @@ function App() {
               Component={List}
             />
           ))}
+          <Route path="/show-cart" element={<ShowCart></ShowCart>}></Route>
         </Routes>
       </BrowserRouter>
     </>

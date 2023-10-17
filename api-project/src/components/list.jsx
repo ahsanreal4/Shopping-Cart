@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from "react";
-import { useLocation } from "react-router-dom";
+import  { useEffect, useState } from "react";
+import { useLocation ,useNavigate } from "react-router-dom";
 import useGetProducts from "../hooks/queries/useGetProducts";
 
 function List() {
@@ -8,13 +8,22 @@ function List() {
   const [filteredCategories, setFilteredCategories] = useState([]);
   const { loading, result } = useGetProducts();
   const [cart, setCart] = useState([]);
-  const [showCart, setShowCart] = useState(false);
+
+  const navigate = useNavigate();
+
+  const addToCart = (product) => {
+    // Add the selected product to the cart state
+    setCart([...cart, product]);
+
+    // Optionally, you can navigate to the cart page here
+    navigate('/show-cart', { state: { cart } });
+  };
 
   useEffect(() => {
     if (!result || result.error || !result.data) return;
 
     setFilteredCategories(result.data.filter((item) => item.category === category));
-  }, [result]);
+  }, [result, category]);
 
   if (loading || !result) return <h1> Loading... </h1>;
 
@@ -29,21 +38,6 @@ function List() {
       {new Array(5 - Math.round(cat.rating.rate)).fill(0).map(() => unFilledStar)}
     </div>
   );
-
-  const addToCart = (product) => {
-    setCart([...cart, product]);
-  };
-
-  const removeFromCart = (product) => {
-    const updatedCart = cart.filter((item) => item !== product);
-    setCart(updatedCart);
-  };
-
-  const toggleCart = () => {
-    setShowCart(!showCart);
-  };
-
-  const buttonLabel = showCart ? "Hide Cart" : "Show Cart";
 
   const content = (
     <div
@@ -60,7 +54,8 @@ function List() {
           {rating(cat, index)}
           <h3>{cat.title}</h3>
           <p>{cat.description}</p>
-          <button className="button-cart" onClick={() => addToCart(cat)}>
+          {/* Pass the product to the addToCart function when the button is clicked */}
+          <button onClick={() => addToCart(cat)} className="button-cart">
             Add to cart
           </button>
         </div>
@@ -71,24 +66,6 @@ function List() {
   return (
     <div>
       {result.error ? errorHeader : content}
-      <button onClick={toggleCart} className="show-cart">
-        {buttonLabel}
-      </button>
-      {showCart && (
-        <ul>
-          {cart.map((item, index) => (
-            <li key={`cart-item-${index}`}>
-              <img src={item.image} alt="" width={200} height={200} />
-              <div>
-              <button onClick={() => removeFromCart(item)} className="remove-from-cart">
-                Remove from Cart
-              </button>
-              </div>
-            </li>
-          ))}
-        </ul>
-      )}
-      
     </div>
   );
 }
