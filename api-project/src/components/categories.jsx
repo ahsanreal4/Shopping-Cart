@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import  { useState } from "react";
 import { CATEGORIES } from "../data/categories";
 import { useNavigate } from "react-router-dom";
 
